@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const citySchema = new Schema({
+const pointSchema = new Schema({
     type:{type:String,
-            enum:["Point"],
             required:true
         },
         coordinates:{type:[Number],
-        required:true},
+        index:'2d'}
     
 })
-const city = mongoose.model('city',citySchema)
 
-module.exports ={ citySchema};
+
+
+module.exports ={ pointSchema};
