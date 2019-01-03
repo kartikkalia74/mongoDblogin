@@ -6,8 +6,8 @@ const pointSchema = new Schema({
     type:{type:String,
             required:true
         },
-        coordinates:{type:[Number],
-        index:'2d'}
+        coordinates:{type:[Number]
+        }
     
 })
 

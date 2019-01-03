@@ -13,9 +13,12 @@ const signupMiddleware = require('./signupMiddleware');
 const post = require('./Routes/post/userPost');
 const users = require('./signupMiddleware');
 const comment = require('./Routes/comment/comment');
-const {location} = require('./model/city');
+const price = require('./Routes/price');
+const location = require('./Routes/geoLocation/geojson');
+const imgSave = require('./Routes/imgsave');
 //middleware 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
 
 
 app.use('/signup',signup)
@@ -24,9 +27,8 @@ app.use('/users',post)
 app.use('/',users)
 app.use('/comment',comment)
 app.use('',signupMiddleware)
-app.post('/test',(req,res)=>{
-    const {name,role} = req.body;
-   location.create({name:'min',location:denver})
-   .then(()=> location.findOne())
-})
+app.use('/location',location)
+app.use('/price',price)
+app.use('/imgsave',imgSave)
+
 module.exports= app;

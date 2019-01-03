@@ -1,30 +1,30 @@
 const express = require('express');
 const Route = express.Router();
 const {location} = require('../../model/city');
-
-Route.get('',(req,res)=>{
-
-
-    location.create(req.body)
-    .then(()=>{
-         location.find({location:{
-            $geoIntersects:{
-                $geometry:{
-                type:'Point',
-                coordinates:[ -79.72211,10.67995] 
-                }
-            }
-        }
+//near points
+Route.get('/location',(req,res)=>{
+//grt the near points from current location
+location.find({location:{
+    $near:{
+        $geometry:{
+            type:'point',
+            coordinates:[ 20,41]
+        },$maxDistance:10000000
     }
-        ,function(err,response){
-            if(err){console.log(err)}
-            console.log(JSON.stringify(response,0,2))
-        }
-    )
-    })
-    .catch()
-   })
+}}).then((results)=>res.send(results))
+    
 
-
-
+})
+//get the location point near to current point
+Route.get('',(req,res)=>{
+    location.aggregate([{$geoNear:
+        {near:{
+            type:'point',
+            coordinates:[20,41]
+        },distanceField:"dist.calculated",
+             maxDistance:20000000,
+             sperical:true
+    }},{$sort:{'dist.calculated':1}},{$limit:1},{$project:{name:1,dist:1}}])
+    .then((result)=>res.send(result))
+});
 module.exports =Route
